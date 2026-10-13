@@ -109,7 +109,7 @@ print("Training complete.")
 # Save model
 # ==============================
 
-model_filename = "svm_final_model.pkl"
+model_filename = "svm_final_model_V6.pkl"
 
 with open(model_filename, "wb") as f:
     pickle.dump(model, f)

@@ -3,7 +3,7 @@ import shutil
 from sklearn.model_selection import train_test_split
 
 # 输入和输出文件夹
-source_root = "processedImages"
+source_root = "processedImages_resized"
 output_root = "dataset_split"
 
 # 数据集比例
