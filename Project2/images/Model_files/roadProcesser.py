@@ -1,17 +1,17 @@
 import os
 from PIL import Image
 
-# 当前脚本建议放在 images 文件夹里面运行
+# Run this script from the images directory
 input_dir = "road"
 output_dir = os.path.join("processedImages", "road")
 
-# 创建输出文件夹
+# Create the output directory
 os.makedirs(output_dir, exist_ok=True)
 
-# 支持的图片格式
+# Supported image formats
 valid_extensions = (".jpg", ".jpeg", ".png")
 
-# 获取 road 文件夹中的所有图片，并按文件名排序
+# List all images in the road directory, sorted by filename
 image_files = sorted([
     f for f in os.listdir(input_dir)
     if f.lower().endswith(valid_extensions)
@@ -19,7 +19,7 @@ image_files = sorted([
 
 print(f"Original road images: {len(image_files)}")
 
-# 每 3 张取 1 张
+# Select every third image
 selected_files = image_files[::3]
 
 print(f"Selected road images: {len(selected_files)}")
@@ -31,15 +31,15 @@ for filename in selected_files:
     input_path = os.path.join(input_dir, filename)
     output_path = os.path.join(output_dir, filename)
 
-    # 打开图片
+    # Open the image
     with Image.open(input_path) as img:
-        # 转为 RGB，避免某些图片格式问题
+        # Convert to RGB to avoid image format issues
         img = img.convert("RGB")
 
-        # Resize 到 64 × 48
+        # Resize to 64 x 48
         img = img.resize(target_size, Image.Resampling.LANCZOS)
 
-        # 保存到 processedImages/road
+        # Save to processedImages/road
         img.save(output_path)
 
 print("Processing complete.")

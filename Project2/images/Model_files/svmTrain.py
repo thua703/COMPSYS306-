@@ -50,9 +50,7 @@ def load_split(split_name):
     return np.array(X), np.array(y), paths
 
 
-# ==============================
 # Load training and validation data
-# ==============================
 
 X_train, y_train, train_paths = load_split("train")
 X_val, y_val, val_paths = load_split("val")
@@ -63,9 +61,7 @@ print("X_train:", X_train.shape)
 print("X_val:", X_val.shape)
 
 
-# ==============================
 # Train baseline SVM
-# ==============================
 
 model = SVC(
     kernel="rbf",
@@ -78,9 +74,8 @@ print("\nTraining SVM...")
 model.fit(X_train, y_train)
 
 
-# ==============================
+
 # Validation
-# ==============================
 
 y_val_pred = model.predict(X_val)
 

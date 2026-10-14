@@ -13,7 +13,7 @@ def load_split(split_name):
     X = []
     y = []
 
-    # 获取所有 class
+    # List all class directories
     class_names = sorted([
         d for d in os.listdir(split_dir)
         if os.path.isdir(os.path.join(split_dir, d))
@@ -36,10 +36,10 @@ def load_split(split_name):
             image_path = os.path.join(class_dir, filename)
 
             with Image.open(image_path) as img:
-                # 确保 RGB
+                # Convert to RGB
                 img = img.convert("RGB")
 
-                # 转成 numpy array
+                # Convert to a NumPy array
                 img_array = np.array(img, dtype=np.float32)
 
                 # Normalize: 0~255 -> 0~1
@@ -57,7 +57,7 @@ def load_split(split_name):
     return X, y
 
 
-# 读取三个 dataset
+# Load the training, validation, and test datasets
 X_train, y_train = load_split("train")
 X_val, y_val = load_split("val")
 X_test, y_test = load_split("test")

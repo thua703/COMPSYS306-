@@ -56,9 +56,8 @@ def load_split(split_name):
     return np.array(X), np.array(y)
 
 
-# ==============================
+
 # Load train + validation
-# ==============================
 
 X_train, y_train = load_split("train")
 X_val, y_val = load_split("val")
@@ -79,9 +78,7 @@ print("X_final:", X_final.shape)
 print("y_final:", y_final.shape)
 
 
-# ==============================
 # Final selected model
-# ==============================
 
 model = SVC(
     kernel="rbf",
@@ -90,9 +87,8 @@ model = SVC(
 )
 
 
-# ==============================
+
 # Train final model
-# ==============================
 
 print("\nTraining final deployment model...")
 
@@ -104,9 +100,8 @@ model.fit(
 print("Training complete.")
 
 
-# ==============================
+
 # Save model
-# ==============================
 
 model_filename = "svmFinalModel.pkl"
 

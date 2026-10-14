@@ -2,21 +2,20 @@ import os
 import shutil
 from sklearn.model_selection import train_test_split
 
-# 输入和输出文件夹
+#define the input and output files
 source_root = "processedImages_resized"
 output_root = "dataset_split"
 
-# 数据集比例
+#ratio of split
 train_ratio = 0.70
 val_ratio = 0.15
 test_ratio = 0.15
 
-# 固定随机种子，保证每次运行结果一致
 random_state = 42
 
 valid_extensions = (".jpg", ".jpeg", ".png")
 
-# 找到所有 class 文件夹
+# get all images
 class_names = sorted([
     d for d in os.listdir(source_root)
     if os.path.isdir(os.path.join(source_root, d))
@@ -29,7 +28,7 @@ for class_name in class_names:
 for class_name in class_names:
     class_dir = os.path.join(source_root, class_name)
 
-    # 读取该 class 的所有图片
+    # read images in this class 
     files = sorted([
         f for f in os.listdir(class_dir)
         if f.lower().endswith(valid_extensions)
@@ -37,7 +36,7 @@ for class_name in class_names:
 
     print(f"\n{class_name}: {len(files)} images")
 
-    # 第一次 split:
+    # first split:
     # 70% train, 30% temporary
     train_files, temp_files = train_test_split(
         files,
@@ -46,8 +45,8 @@ for class_name in class_names:
         shuffle=True
     )
 
-    # 第二次 split:
-    # 将剩下 30% 平分成 15% validation 和 15% test
+    # second split:
+    # split 30% rest to 15% validation and 15% test
     val_files, test_files = train_test_split(
         temp_files,
         test_size=0.5,
@@ -61,7 +60,7 @@ for class_name in class_names:
         "test": test_files
     }
 
-    # 复制文件
+    # copy the files
     for split_name, split_files in splits.items():
         output_dir = os.path.join(
             output_root,

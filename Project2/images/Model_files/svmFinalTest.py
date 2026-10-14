@@ -62,9 +62,8 @@ def load_split(split_name):
     return np.array(X), np.array(y), paths
 
 
-# ==============================
+
 # Load train and test data
-# ==============================
 
 X_train, y_train, _ = load_split("train")
 X_test, y_test, test_paths = load_split("test")
@@ -74,9 +73,8 @@ print("X_train:", X_train.shape)
 print("X_test:", X_test.shape)
 
 
-# ==============================
+
 # Final selected SVM
-# ==============================
 
 model = SVC(
     kernel="rbf",
@@ -85,18 +83,16 @@ model = SVC(
 )
 
 
-# ==============================
+
 # Train final selected model
-# ==============================
 
 print("\nTraining final SVM...")
 
 model.fit(X_train, y_train)
 
 
-# ==============================
+
 # Test
-# ==============================
 
 print("\nTesting final SVM...")
 
@@ -132,9 +128,8 @@ print(
 )
 
 
-# ==============================
+
 # Misclassified images
-# ==============================
 
 print("\nMisclassified images:")
 

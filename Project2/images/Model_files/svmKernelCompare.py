@@ -53,9 +53,7 @@ def load_split(split_name):
     return np.array(X), np.array(y)
 
 
-# ==============================
 # Load train and validation sets
-# ==============================
 
 X_train, y_train = load_split("train")
 X_val, y_val = load_split("val")
@@ -65,9 +63,8 @@ print("X_train:", X_train.shape)
 print("X_val:", X_val.shape)
 
 
-# ==============================
+
 # Models to compare
-# ==============================
 
 models = [
     (
@@ -118,9 +115,8 @@ models = [
 ]
 
 
-# ==============================
+
 # Compare models
-# ==============================
 
 results = []
 
@@ -150,9 +146,7 @@ for model_name, model in models:
     )
 
 
-# ==============================
 # Print results
-# ==============================
 
 print("\n===== KERNEL COMPARISON =====")
 
@@ -164,9 +158,8 @@ for model_name, accuracy in results:
     )
 
 
-# ==============================
+
 # Best model
-# ==============================
 
 best_model = max(
     results,

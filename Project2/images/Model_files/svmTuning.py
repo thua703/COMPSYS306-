@@ -53,9 +53,8 @@ def load_split(split_name):
     return np.array(X), np.array(y)
 
 
-# ==============================
+
 # Load train and validation sets
-# ==============================
 
 X_train, y_train = load_split("train")
 X_val, y_val = load_split("val")
@@ -66,9 +65,8 @@ print("X_train:", X_train.shape)
 print("X_val:", X_val.shape)
 
 
-# ==============================
+
 # Hyperparameter ranges
-# ==============================
 
 C_values = [0.1, 1, 10, 100]
 
@@ -87,9 +85,7 @@ best_gamma = None
 results = []
 
 
-# ==============================
 # Hyperparameter tuning
-# ==============================
 
 print("\nStarting hyperparameter tuning...\n")
 
@@ -131,9 +127,8 @@ for C in C_values:
             best_gamma = gamma
 
 
-# ==============================
+
 # Print all results
-# ==============================
 
 print("\n\n===== ALL RESULTS =====")
 
@@ -146,9 +141,8 @@ for C, gamma, accuracy in results:
     )
 
 
-# ==============================
+
 # Best result
-# ==============================
 
 print("\n===== BEST MODEL =====")
 
