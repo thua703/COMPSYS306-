@@ -144,51 +144,103 @@ def main():
             history.append(raw)
             event = ''
 
-            # Independent latches allow Yellow to be confirmed while Blue is held.
-            # A label rearms after it leaves the entire seven-frame window.
-            latched.intersection_update(set(history))
-            if raw == 'road':
-                road_streak += 1
-            else:
-                road_streak = 0
+            # ============================================================
+            # SHEEP WAITING MODE
+            # ============================================================
 
-            if road_streak >= ROAD_RELEASE_FRAMES:
-                if actions.sheep_hold:
+            if actions.sheep_hold:
+
+                # Ignore all signs while waiting for the sheep to disappear.
+                # Only consecutive road predictions can release the sheep hold.
+
+                if raw == 'road':
+                    road_streak += 1
+                else:
+                    road_streak = 0
+
+                if road_streak >= ROAD_RELEASE_FRAMES:
+
+                    # Sheep is considered removed.
                     actions.sheep_hold = False
-                    event = 'RELEASED sheep'
-                    # Discard predictions collected while waiting for sheep.
-                    history.clear()
-                confirmed = None
-                latched.clear()
 
-            # Ignore every sign while sheep is held; road release is handled above.
-            if not actions.sheep_hold:
-                # Blue/Sheep require consecutive frames for fast confirmation.
+                    confirmed = None
+                    road_streak = 0
+
+                    # Clear old predictions and confirmation locks.
+                    history.clear()
+                    latched.clear()
+
+                    event = 'SHEEP REMOVED'
+
+            # ============================================================
+            # NORMAL MODE
+            # ============================================================
+
+            else:
+
+                # Update consecutive road counter.
+                if raw == 'road':
+                    road_streak += 1
+                else:
+                    road_streak = 0
+
+                # Re-arm labels that have left the voting window.
+                latched.intersection_update(set(history))
+
+                if road_streak >= ROAD_RELEASE_FRAMES:
+                    confirmed = None
+                    latched.clear()
+
+                # --------------------------------------------------------
+                # Fast confirmation: Blue light and Sheep
+                # --------------------------------------------------------
+
                 fast_candidate = None
+
                 if len(history) >= FAST_STOP_FRAMES:
+
                     recent = list(history)[-FAST_STOP_FRAMES:]
-                    if recent[0] in FAST_STOP_LABELS and all(
-                        label == recent[0] for label in recent
-                    ):
-                        fast_candidate = recent[0]
+
+                    if all(label == recent[0] for label in recent):
+
+                        if recent[0] in FAST_STOP_LABELS:
+                            fast_candidate = recent[0]
 
                 if fast_candidate is not None and fast_candidate not in latched:
+
                     confirmed = fast_candidate
                     latched.add(fast_candidate)
+
                     actions.confirm(fast_candidate, time.monotonic())
+
                     event = f'FAST CONFIRMED {fast_candidate}'
+
+                    # Reset road counter when entering Sheep Waiting Mode.
+                    if fast_candidate == 'sheep':
+                        road_streak = 0
+
+                # --------------------------------------------------------
+                # Normal confirmation: STOP / SPEED / Yellow
+                # --------------------------------------------------------
+
                 else:
-                    # All other signs retain the original 5/7 voting strategy.
+
                     counts = Counter(
                         label for label in history
                         if label != 'road' and label not in FAST_STOP_LABELS
                     )
+
                     if counts:
+
                         candidate, votes = counts.most_common(1)[0]
+
                         if votes >= VOTE_THRESHOLD and candidate not in latched:
+
                             confirmed = candidate
                             latched.add(candidate)
+
                             actions.confirm(candidate, time.monotonic())
+
                             event = f'CONFIRMED {candidate}'
 
             motion = actions.update(time.monotonic())
